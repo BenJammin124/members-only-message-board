@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Optional external CSS -->
+    <!-- <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .form-group input[type="password"]:focus,
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus {
+            border-color: #4CAF50;
+        }
+    </style> -->
+  </head>
+  <body>
+    <header><%- include('./partials/navbar') %></header>
+    <div class="form-container">
+      <form
+        action="/create-account"
+        method="POST"
+        class="create-form"
+        novalidate
+      >
+        <h2>Create Account</h2>
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            value="<%= previousData.first_name %>"
+            autofocus
+            pattern="[a-zA-Z]+"
+            min="1"
+            required
+          />
+
+          <span class="error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            value="<%= previousData.last_name %>"
+            pattern="[a-zA-Z]+"
+            min="1"
+            required
+          />
+          <span class="error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+          <span class="error"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}"
+            required
+          />
+          <span class="error"></span>
+        </div>
+
+        <div class="form-group">
+          <input type="checkbox" name="showPassword" id="showPassword" />
+          <label for="showPassword">Show/hide password</label>
+        </div>
+
+        <div id="password-message">
+          <h3>Password must contain:</h3>
+          <p class="password-message-item invalid">
+            At least
+            <b>one lowercase letter</b>
+          </p>
+          <p class="password-message-item invalid">
+            At least
+            <b>one uppercase letter</b>
+          </p>
+          <p class="password-message-item invalid">
+            At least
+            <b>one number</b>
+          </p>
+          <p class="password-message-item invalid">
+            Minimum
+            <b>5 characters</b>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" />
+          <span class="error"></span>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="checkbox"
+            name="showConfirmPassword"
+            id="showConfirmPassword"
+          />
+          <label for="showConfirmPassword">Show/hide password</label>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="confirmBtn">Create Account</button>
+        </div>
+      </form>
+
+      <p>Already have an account?</p>
+      <a href="/login">Sign in</a>
+    </div>
+    <script src="./jsscripts/dropdownfunction.js"></script>
+    <script>
+      var passwordInput = document.getElementById("password");
+      var passwordMessageItems = document.getElementsByClassName(
+        "password-message-item"
+      );
+      var passwordMessage = document.getElementById("password-message");
+
+      passwordInput.onfocus = function () {
+        passwordMessage.style.display = "block";
+      };
+
+      // After clicking outside of password input hide the message
+      // passwordInput.onblur = function () {
+      //   passwordMessage.style.display = "none";
+      // };
+
+      passwordInput.onkeyup = function () {
+        let uppercaseRegex = /[A-Z]/g;
+        if (passwordInput.value.match(uppercaseRegex)) {
+          passwordMessageItems[1].classList.remove("invalid");
+          passwordMessageItems[1].classList.add("valid");
+        } else {
+          passwordMessageItems[1].classList.remove("valid");
+          passwordMessageItems[1].classList.add("invalid");
+        }
+
+        let lowercaseRegex = /[a-z]/g;
+        if (passwordInput.value.match(lowercaseRegex)) {
+          passwordMessageItems[0].classList.remove("invalid");
+          passwordMessageItems[0].classList.add("valid");
+        } else {
+          passwordMessageItems[0].classList.remove("valid");
+          passwordMessageItems[0].classList.add("invalid");
+        }
+
+        let numbersRegex = /[0-9]/g;
+        if (passwordInput.value.match(numbersRegex)) {
+          passwordMessageItems[2].classList.remove("invalid");
+          passwordMessageItems[2].classList.add("valid");
+        } else {
+          passwordMessageItems[2].classList.remove("valid");
+          passwordMessageItems[2].classList.add("invalid");
+        }
+
+        if (passwordInput.value.length >= 5) {
+          passwordMessageItems[3].classList.remove("invalid");
+          passwordMessageItems[3].classList.add("valid");
+        } else {
+          passwordMessageItems[3].classList.remove("valid");
+          passwordMessageItems[3].classList.add("invalid");
+        }
+      };
+
+      const form = document.querySelector("form");
+      const email = document.getElementById("email");
+      const firstName = document.getElementById("first_name");
+      const lastName = document.getElementById("last_name");
+
+      const showHide = document.querySelector("#showPassword");
+      const showHideConfirm = document.querySelector("#showConfirmPassword");
+      const password = document.querySelector("#password");
+      const confirmPassword = document.querySelector("#confirmPassword");
+      const confirmPasswordError = document.querySelector(
+        "#confirmPassword + span.error"
+      );
+
+      const arr = [email, firstName, lastName, password];
+
+      arr.forEach((input) => {
+        input.addEventListener("focus", (event) => {
+          input.classList.remove("invalidInput");
+        });
+
+        input.addEventListener("focusout", (event) => {
+          if (input.validity.valid) {
+            const errorElement = document.querySelector(
+              `#${input.id} + span.error`
+            );
+            errorElement.textContent = "";
+            errorElement.className = "error";
+            input.classList.remove("invalidInput");
+          } else {
+            showError(input);
+          }
+        });
+      });
+
+      form.addEventListener("submit", (event) => {
+        let isValid = true;
+
+        arr.forEach((input) => {
+          if (!input.validity.valid) {
+            showError(input);
+            isValid = false;
+          }
+        });
+
+        //  if field is invalid, prevent form submission
+        if (!isValid) {
+          event.preventDefault();
+        }
+      });
+
+      function showError(input) {
+        let errorElement = document.querySelector(`#${input.id} + span.error`);
+
+        if (input === email) {
+          if (input.validity.valueMissing) {
+            errorElement.textContent = "You need to enter an email address.";
+          } else if (input.validity.typeMismatch) {
+            errorElement.textContent =
+              "Entered value needs to be an email address.";
+          } else if (input.validity.tooShort) {
+            errorElement.textContent = `Email should be at least ${input.minLength} characters; you entered ${input.value.length}.`;
+          }
+        }
+
+        if (input === firstName || input === lastName) {
+          if (input.validity.valueMissing) {
+            errorElement.textContent = `${
+              input.name === "first_name" ? "First name" : "Last name"
+            } is required.`;
+          } else if (input.validity.tooShort) {
+            errorElement.textContent = `${input.name} should be at least ${input.minLength} characters; you entered ${input.value.length}.`;
+          } else if (input.validity.patternMismatch) {
+            errorElement.textContent = `${
+              input.name === "first_name" ? "First name" : "Last name"
+            } may only contain letters`;
+          }
+        }
+
+        if (input === password) {
+          if (input.validity.valueMissing) {
+            errorElement.textContent = "Password is required.";
+          } else if (input.validity.patternMismatch) {
+            errorElement.textContent =
+              "Your password must contain one lowercase and uppercase letter, one number and be at least 5 characters";
+          }
+        }
+
+        input.classList.add("invalidInput");
+        errorElement.className = "error active";
+      }
+
+      showHide.addEventListener("click", (e) => {
+        if (e.srcElement.checked) {
+          password.type = "text";
+        } else {
+          password.type = "password";
+        }
+      });
+
+      showHideConfirm.addEventListener("click", (e) => {
+        if (e.srcElement.checked) {
+          confirmPassword.type = "text";
+        } else {
+          confirmPassword.type = "password";
+        }
+      });
+
+      confirmPassword.addEventListener("input", checkPasswordMatch);
+      confirmPassword.addEventListener("blur", checkPasswordMatch);
+
+      password.addEventListener("input", checkPasswordMatch);
+
+      function checkPasswordMatch() {
+        if (confirmPassword.value === "") {
+          confirmPasswordError.textContent = "";
+          confirmPasswordError.classList.remove("active");
+        } else if (password.value === confirmPassword.value) {
+          confirmPasswordError.textContent = "Passwords match!";
+          confirmPasswordError.classList.add("password-match");
+          confirmPasswordError.classList.add("active");
+        } else {
+          confirmPasswordError.textContent = "Passwords do not match!";
+          confirmPasswordError.classList.add("active");
+          confirmPasswordError.classList.remove("password-match");
+        }
+      }
+    </script>
+  </body>
+</html>

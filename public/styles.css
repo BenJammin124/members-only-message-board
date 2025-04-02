@@ -1,0 +1,250 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  interpolate-size: allow-keywords;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* password-message-box */
+#password-message {
+  display: block;
+  background: #ffffff;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  /* margin-top: 10px; */
+  text-align: left;
+}
+
+#password-message h3 {
+  font-size: 15px;
+  margin-top: 0;
+  text-transform: uppercase;
+}
+
+#password-message p {
+  margin: 8px 0;
+}
+
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -5px;
+  content: "✔";
+}
+
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -5px;
+  content: "✖";
+}
+
+/* Error message style */
+.error-msg {
+  color: red;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* instant-form-feedback */
+body {
+  font: 1em sans-serif;
+  /* width: 250px; */
+  padding: 0;
+  margin: 0 auto;
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  /* width: 30%; */
+  max-width: 600px;
+  gap: 10px;
+  padding: 1rem;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  /* appearance: none; */
+  width: 100%;
+  padding: 3px;
+  padding-left: 7px;
+  border: 1px solid #333;
+  margin: 0;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 90%;
+  line-height: 1.5;
+  border-bottom-left-radius: 0;
+}
+
+input.invalidInput {
+  border: 1px solid red;
+  /* outline: none; */
+}
+
+.error {
+  width: 100%;
+  padding: 0;
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+}
+
+.error.active {
+  padding: 0.3em;
+  position: relative;
+  top: 1px;
+}
+
+.password-match {
+  color: rgb(27, 141, 27);
+  background-color: #ffffff;
+}
+
+.form-group:nth-child(-n + 4) {
+  margin-bottom: 1rem;
+}
+
+.form-group:last-of-type {
+  margin-top: 10px;
+}
+
+/* login page */
+.form-container {
+  max-width: 450px;
+}
+
+/* navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  align-items: center;
+}
+
+.navbar-left .logo {
+  text-decoration: none;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.navbar-right a {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  font-size: 16px;
+}
+
+.navbar-right .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-right .dropbtn {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar-right .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  min-width: 115px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+}
+
+/* .navbar-right .dropdown:hover .dropdown-content {
+  display: block;
+} */
+
+.navbar-right .dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  margin: 0;
+  border-radius: 5px;
+}
+
+.navbar-right .dropdown-content a:hover {
+  background-color: #575757;
+}
+
+.dropdown-content.show {
+  display: block;
+}
