@@ -3,18 +3,72 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>MembersOnly</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <%- include('./partials/navbar') %>
-    <div>
-      <% if(locals.user) { %>
-      <p><%= user.id %></p>
+    <div class="main">
+      <% if(locals.user) { %> <% if(user.member) { %>
+      <div class="membership-banner">
+        <p>Thanks for joining — enjoy your new access!</p>
+      </div>
+      <% } else {%>
 
+      <div class="membership-banner">
+        <p>
+          Want to see who posted and when? <a href="/members">Join now</a> and
+          unlock full access!
+        </p>
+      </div>
+      <% } %>
+
+      <div class="center">
+        <a href="/create-new-message" class="create-message-link"
+          >Create new message</a
+        >
+      </div>
       <%} else {%>
-      <p>loggerout</p>
+      <div class="membership-banner">
+        <p>
+          Create an account to make your own posts!
+          <a href="/create-account">Click here!</a>
+        </p>
+        <p>Or <a href="/login">Sign in</a></p>
+      </div>
       <%}%>
+
+      <div class="message-board">
+        <% if(messages) { %> <% messages.forEach(message => { %>
+        <div class="message">
+          <div class="left-message">
+            <img src="images/profilepic.svg" alt="profile.img" />
+
+            <% if(locals.user && locals.user.member) {%>
+            <div class="message-poster"><%= message.email %></div>
+            <div class="message-date">Posted <%= message.created_at %></div>
+            <% } else { %>
+            <div class="message-poster">*******</div>
+            <div class="message-date">Posted *******</div>
+            <% } %>
+          </div>
+          <div class="right-message">
+            <div class="message-header"><%= message.title %></div>
+            <div class="message-text"><%= message.text %></div>
+            <!-- <a href="/<%= message.id %>">More Detes</a> -->
+          </div>
+        </div>
+        <% }) %> <% }%>
+      </div>
+
       <a href="/logout" title="click to logout">Log Out</a>
     </div>
     <script src="/jsscripts/dropdownfunction.js"></script>

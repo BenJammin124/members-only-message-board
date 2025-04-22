@@ -1,12 +1,28 @@
 <nav class="navbar">
   <div class="navbar-left">
-    <a href="/" class="logo">MySite</a>
+    <a href="/" class="logo">MembersOnly</a>
   </div>
   <div class="navbar-right">
     <% if (user) { %>
     <div class="dropdown">
-      <button class="dropbtn"><%= user.email %> ^</button>
+      <div>
+        <button
+          class="dropbtn"
+          style="display: flex; align-items: center; gap: 0.5rem"
+        >
+          <%= user.email %><img
+            width="15"
+            height="15"
+            src="https://img.icons8.com/ios-filled/50/FFFFFF/down-squared--v2.png"
+            alt="down-squared--v2"
+          />
+        </button>
+      </div>
+
       <div class="dropdown-content">
+        <a href="/create-new-message">New Post</a>
+        <a href="/members">Members</a>
+        <a href="/">Home</a>
         <a href="/logout">Log Out</a>
       </div>
     </div>

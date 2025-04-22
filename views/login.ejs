@@ -5,13 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log in to Members</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <%- include('./partials/navbar') %>
     <div class="form-container">
-      <form action="/login" method="post">
-        <h1>Sign in to Members Lounge</h1>
+      <form action="/login" method="post" class="create-form">
+        <h2>Sign in to Members Lounge</h2>
 
+        <%- include('./partials/errors') %>
         <div class="form-group">
           <label for="email">Email: </label>
           <input type="text" name="email" id="email" />
@@ -20,9 +29,11 @@
           <label for="password">Password: </label>
           <input type="password" name="password" id="password" />
         </div>
-        <button type="submit">Sign in</button>
+        <div class="center">
+          <button type="submit" class="confirmBtn">Sign in</button>
+        </div>
       </form>
-      <div>
+      <div class="center">
         <a href="/create-account">Create Account</a>
       </div>
     </div>

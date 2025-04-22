@@ -5,37 +5,57 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const { userDataValidate } = require("../validations/userValidation");
+const {
+  userDataValidate,
+  newMessageValidation,
+} = require("../validations/userValidation");
+
+const formatDate = (time) => {
+  const date = new Date(time);
+
+  const options = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  };
+
+  const formatted = date.toLocaleString("en-US", options);
+  return formatted;
+};
 
 exports.indexHome = asyncHandler(async (req, res, next) => {
+  const messages = await db.getAllMessages();
+  console.log(messages);
+  messages.forEach((message) => {
+    message.created_at = formatDate(message.created_at);
+  });
+
   res.render("home", {
     user: req.user,
+    messages: messages,
   });
 });
 
 exports.createAccountForm = asyncHandler(async (req, res, next) => {
   res.render("create-account", {
     title: "Create account",
-    previousData: { first_name: "" },
+    previousData: false,
     user: req.user,
-    // errors: false,
+    errors: false,
+    messages: req.flash(),
   });
 });
-
-// function errorsArrayHelper(errors) {
-
-// }
 
 exports.createAccountFormPost = [
   userDataValidate,
 
   asyncHandler(async (req, res, next) => {
-    console.log(req.body);
-
     const errors = validationResult(req);
     console.log(errors.array());
     if (!errors.isEmpty()) {
-      console.log(errors);
       return res.status(400).render("create-account", {
         title: "Create account",
         previousData: req.body,
@@ -47,12 +67,14 @@ exports.createAccountFormPost = [
     const { first_name, last_name, email, password } = req.body;
 
     const userExists = await db.checkForEmail(email);
-    console.log(userExists);
+
     if (userExists.length > 0) {
-      throw new CustomNotFoundError(
-        "Username already exists. Please choose another.",
-        400
-      );
+      // throw new CustomNotFoundError(
+      //   "Username already exists. Please choose another.",
+      //   400
+      // );
+      req.flash("error", "Email is already in use. Please try another.");
+      return res.redirect("create-account");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,7 +85,7 @@ exports.createAccountFormPost = [
 ];
 
 exports.logInForm = asyncHandler(async (req, res, next) => {
-  res.render("login", { user: req.user });
+  res.render("login", { user: req.user, messages: req.flash() });
 });
 
 exports.logInSubmit = asyncHandler(async (req, res, next) => {
@@ -74,10 +96,8 @@ exports.logInSubmit = asyncHandler(async (req, res, next) => {
     }
 
     if (!user) {
-      // Log the message that was passed from the strategy
-      console.log(info); // This will log the error message (e.g., "Incorrect username" or "Incorrect password")
-
-      return res.redirect("/login"); // Redirect back to the login page (or handle it in another way)
+      req.flash("error", info.message || "Invalid username or password.");
+      return res.redirect("/login");
     }
 
     req.logIn(user, (err) => {
@@ -91,10 +111,55 @@ exports.logInSubmit = asyncHandler(async (req, res, next) => {
 });
 
 exports.createNewMessageForm = asyncHandler(async (req, res, next) => {
-  res.render("create-new-message", { user: req.user });
+  res.render("create-new-message", { user: req.user, title: "", message: "" });
 });
 
-exports.postNewMessage = asyncHandler(async (req, res, next) => {
-  console.log(req.user);
-  console.log(req.body);
+exports.postNewMessage = [
+  newMessageValidation,
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      return res.render("create-new-message", {
+        user: req.user,
+        errors: errors.array(),
+        title: req.body.title,
+        message: req.body.message,
+      });
+    }
+
+    const { title, message } = req.body;
+    const { id } = req.user;
+
+    const result = await db.postNewMessage(title, message, id);
+
+    if (result) {
+      res.redirect("/");
+    } else {
+      throw new CustomNotFoundError("Something happened", 400);
+    }
+  }),
+];
+
+exports.membersPage = (req, res) => {
+  res.render("members", {
+    user: req.user,
+    messages: req.flash(),
+  });
+};
+
+exports.membersPagePost = asyncHandler(async (req, res, next) => {
+  if (req.body.member) {
+    const result = await db.addMembershipToUser(req.user.id);
+    if (result) {
+      res.redirect("/");
+    } else {
+      req.flash("error", "An error occurred or you are already a member ");
+      res.redirect("/members");
+    }
+  } else {
+    req.flash("error", "You forgot to click the checkbox!");
+    res.redirect("/members");
+  }
 });

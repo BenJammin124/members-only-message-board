@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <%- include('./partials/navbar') %>
+    <div class="main">
+      <%- include('./partials/errors') %> <% if(user && user.member) { %>
+      <div>
+        <h3>Welcome to the members club!</h3>
+      </div>
+
+      <% } else { %>
+      <h3>Become a member</h3>
+      <p class="member-p">
+        Members can see exactly who posted what — and when. Don't miss out!
+      </p>
+      <form action="/members" method="post" class="membership-form">
+        <p class="member-p">Just check the box below to upgrade your access.</p>
+
+        <div class="member-flex">
+          <label for="member">Join the Club:</label>
+          <input type="checkbox" name="member" id="member" class="checkbox" />
+        </div>
+
+        <button type="submit" class="confirmBtn">Submit membership</button>
+      </form>
+      <% } %>
+    </div>
+    <script src="/jsscripts/dropdownfunction.js"></script>
+  </body>
+</html>

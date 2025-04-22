@@ -21,4 +21,7 @@ indexRouter.get("/logout", (req, res, next) => {
 indexRouter.get("/create-new-message", indexController.createNewMessageForm);
 indexRouter.post("/create-new-message", indexController.postNewMessage);
 
+indexRouter.get("/members", indexController.membersPage);
+indexRouter.post("/members", indexController.membersPagePost);
+
 module.exports = { indexRouter };

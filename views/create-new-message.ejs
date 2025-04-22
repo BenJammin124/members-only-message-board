@@ -3,22 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Create new post</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header><%- include('./partials/navbar') %></header>
     <div class="form-container">
-      <form action="new-message" method="post">
-        <h1>Create new post</h1>
+      <form action="/create-new-message" method="post" class="create-form">
+        <h2>Create new post</h2>
+        <%- include('./partials/newMessageErrors') %>
         <div class="form-group">
           <label for="title">Title: </label>
-          <input type="text" name="title" id="title" />
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value="<%= title || '' %>"
+          />
         </div>
         <div class="form-group">
           <label for="message">Message: </label>
-          <textarea name="message" id="message"></textarea>
+          <textarea rows="4" name="message" id="message">
+<%= message || '' %></textarea
+          >
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" class="confirmBtn">Submit</button>
       </form>
     </div>
     <script src="./jsscripts/dropdownfunction.js"></script>

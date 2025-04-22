@@ -24,16 +24,36 @@ const userDataValidate = [
     .notEmpty()
     .withMessage("Email is required"),
 
-  body("password").isStrongPassword({
-    minLength: 5,
-    minUppercase: 1,
-    minLowercase: 1,
-    minNumbers: 1,
-  }),
+  body("password")
+    .isStrongPassword({
+      minLength: 5,
+      minUppercase: 1,
+      minLowercase: 1,
+      minNumbers: 1,
+      minSymbols: 0,
+    })
+    .withMessage("password must be atleast 5 chars long, contain 1 uppercase"),
 
   body("confirmPassword").custom((value, { req }) => {
     return value === req.body.password;
   }),
 ];
 
-module.exports = { userDataValidate };
+const newMessageValidation = [
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("Title is required")
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Title must be between 3 and 100 characters"),
+
+  body("message")
+    .trim()
+    .notEmpty()
+    .withMessage("Message is required")
+    .isLength({ min: 5, max: 500 })
+    .withMessage("Message must be between 5 and 500 characters")
+    .escape(),
+];
+
+module.exports = { userDataValidate, newMessageValidation };

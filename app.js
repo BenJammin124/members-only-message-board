@@ -6,6 +6,7 @@ require("dotenv").config();
 const pool = require("./db/pool");
 const app = express();
 const { indexRouter } = require("./routes/indexRouter");
+const flash = require("connect-flash");
 
 const pgSession = require("connect-pg-simple")(session);
 
@@ -37,11 +38,13 @@ require("./config/passport");
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
-  next();
-});
+app.use(flash());
+
+// app.use((req, res, next) => {
+//   console.log(req.session);
+//   console.log(req.user);
+//   next();
+// });
 
 app.use((err, req, res, next) => {
   console.error(err);
